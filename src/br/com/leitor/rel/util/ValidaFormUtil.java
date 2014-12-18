@@ -5,6 +5,8 @@ import java.util.List;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+import br.com.leitor.rel.model.FileREL;
+
 
 public class ValidaFormUtil {
 	
@@ -34,8 +36,8 @@ public class ValidaFormUtil {
 	}
 	
 	/**	M�todo que verifica se o arquivo est� no formato REL **/
-	public boolean validaFileREL(File fileREL) {
-		if (fileREL.getName().toLowerCase().endsWith(".rel")){
+	public boolean validaFileREL(FileREL fileREL) {
+		if (fileREL.getFile().getName().toLowerCase().endsWith(".rel")){
 			return true;
 		}
 		return false;

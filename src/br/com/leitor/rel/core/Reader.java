@@ -15,7 +15,7 @@ public class Reader {
 	public String pathDAT;
 	public String pathREL;
 
-	public List<FileREL> getListFileREL(String path) {
+	public static List<FileREL> getListFileREL(String path) {
 		File directory = new File(path);
 		List<FileREL> listaFileREL = new ArrayList<FileREL>();
 		File[] files = directory.listFiles();
@@ -29,17 +29,14 @@ public class Reader {
 		return listaFileREL;
 	}
 
-	public FileDAT getFileDAT(String path) {
+	public static FileDAT getFileDAT(String path) {
 		File directory = new File(path);
-		File[] files = directory.listFiles();
 		FileDAT fileDAT = new FileDAT();
 
-		for (File file : files) {
-			if (file.getName().endsWith(".dat")
-					|| file.getName().endsWith(".DAT")) {
-				fileDAT.setFile(file);
-				fileDAT.setContent(getListContent(file));
-			}
+		if (directory.getName().endsWith(".dat")
+				|| directory.getName().endsWith(".DAT")) {
+			fileDAT.setFile(directory);
+			fileDAT.setContent(getListContent(directory));
 		}
 		return fileDAT;
 	}

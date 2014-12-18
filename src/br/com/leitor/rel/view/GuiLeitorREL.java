@@ -21,6 +21,7 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import br.com.leitor.rel.core.Formatter;
+import br.com.leitor.rel.core.Reader;
 import br.com.leitor.rel.core.Writer;
 import br.com.leitor.rel.model.FileDAT;
 import br.com.leitor.rel.model.FileREL;
@@ -52,8 +53,6 @@ public class GuiLeitorREL {
 	JLabel status;
 	JFileChooser fchooser;
 	JTextArea tarea;
-	List<File> listFileREL = null;
-	File fileDAT;
 	JButton copiar;
 
 	public void interfaceGui(Container pane) {
@@ -126,34 +125,38 @@ public class GuiLeitorREL {
 	}
 	
 	public class gerarArquivosAL implements ActionListener {
+		
+		@SuppressWarnings("static-access")
 		public void actionPerformed(ActionEvent e){
 			ValidaFormUtil formUtil =  new ValidaFormUtil(frame);
 			
 			if(formUtil.validaCampos(diretorioREL.getText(), diretorioDAT.getText(),destinoSalvar.getText())){
-//				listFileREL = new GeradorXLS().getListFile(diretorioREL.getText());
-//				fileDAT = new GeradorXLS().getFile(diretorioDAT.getText());
-//				String path = destinoSalvar.getText();
-//				int index = 1;
-//				
-//				for (File fileREL : listFileREL) {
-//					if(formUtil.validaFileREL(fileREL)){
-//						String pathCaso = path.concat("/CASO-0"+index);
-//						File pastaCaso = new File(pathCaso);
-//						pastaCaso.mkdir();
+				List<FileREL> listFileREL = new Reader().getListFileREL(diretorioREL.getText());
+				FileDAT fileDAT = new Reader().getFileDAT(diretorioDAT.getText());
+				String path = destinoSalvar.getText();
+				int index = 1;
+				
+				for (FileREL fileREL : listFileREL) {
+					if(formUtil.validaFileREL(fileREL)){
+						String pathCaso = path.concat("/CASO-0"+index);
+						File pastaCaso = new File(pathCaso);
+						pastaCaso.mkdir();
 //						GeradorXLS geradorXLS = new GeradorXLS();
 //						geradorXLS.gerarArquivoXLS(fileREL,fileDAT,pathCaso);
-//						index++;
-//					}	
-//				}
-				
-				FileXLS fileXLS = new FileXLS();
-				fileXLS.setPath(destinoSalvar.getText()+"/SAIDA-DESEJADA.xls");
-				fileXLS.setSheetName("SAIDA");
-		        fileXLS.setListContent(Formatter.FormatterXLS(new FileREL(), new FileDAT()));
-		        
-		        Writer writer = new Writer();
-		        writer.generateXLS(fileXLS);	
-				
+						
+						FileXLS fileXLS = new FileXLS();
+						fileXLS.setPath(destinoSalvar.getText()+"/SAIDA-DESEJADA.xls");
+						fileXLS.setSheetName("SAIDA");
+						
+						Formatter formatter = new Formatter(fileREL, fileDAT);
+				        fileXLS.setListContent(formatter.FormatterXLS(new FileREL(), new FileDAT()));
+				        
+				        Writer writer = new Writer();
+				        writer.generateXLS(fileXLS);	
+				        
+						index++;
+					}	
+				}
 				JOptionPane.showMessageDialog(frame, "Arquivos gerados com sucesso na pasta: "+destinoSalvar.getText());
 			}
 		}
