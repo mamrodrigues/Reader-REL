@@ -2,7 +2,9 @@ package br.com.leitor.rel.core;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.sql.rowset.serial.SerialArray;
 
@@ -42,33 +44,26 @@ public class Formatter {
 	
 	private List<String[]> getHeader() {
 		
+		List<EAF> listEAF = mapHeader();
 		List<String[]> dataList = new ArrayList<String[]>();
-        String[][] dataArray1 = new String[][]{
-             {" "," ","DATA","SE","SU","NE","NO"}
-        };
-        
-        List<EAF> listEAF = mapHeader();
-        String[][] dataArray2 =  null;
+		
+
+		dataList.add(new String[]
+             {" "," ","DATA","SE","SU","NE","NO"});
+       
         for (int i = 0; i < listEAF.size(); i++) {
         	EAF eaf = listEAF.get(i);
         	if(i == 0){
-            	dataArray2 = new String[][]{
-        	        	{" ","EARMI",eaf.getData(),eaf.getSe(),eaf.getSu(),eaf.getNe(),eaf.getNo()}
-        	        };
+        		dataList.add(new String[]
+        	        	{" ","EARMI",eaf.getData(),eaf.getSe(),eaf.getSu(),eaf.getNe(),eaf.getNo()});
         	}else{
-            	dataArray2 = new String[][]{
-        	        	{"1","EAF",eaf.getData(),eaf.getSe(),eaf.getSu(),eaf.getNe(),eaf.getNo()}
-        	    };
+        		dataList.add(new String[]
+        	        	{"1","EAF",eaf.getData(),eaf.getSe(),eaf.getSu(),eaf.getNe(),eaf.getNo()});
         	}
 		}
         
-        String[][] dataArray3 = new String[][]{
-             {" "," "," ","SE","SU","NE","NO"}
-        };
-        
-        dataList.addAll(Arrays.asList(dataArray1));
-        dataList.addAll(Arrays.asList(dataArray2));
-        dataList.addAll(Arrays.asList(dataArray3));
+        dataList.add(new String[]
+             {" "," "," ","SE","SU","NE","NO"});
         
 		return dataList;
 	}
@@ -98,17 +93,28 @@ public class Formatter {
 		/** APÓS O PREENCHIMENTO DA STRING EU PREENCHO O OBJETO PARA QUE OS DADOS RETORNEM UMA LISTA DO OBJETO NECESSÁRIO **/
 		List<EAF> listEAF = new ArrayList<EAF>();
 		for (String stringEAF : listStringEAF) {
-			String[] dadosEAF = stringEAF.split(" ");
-			if(dadosEAF.length >= 4){
+			String[] dadosEAF = getLineArrayClean(stringEAF);
+			for (int j = 0; j < dadosEAF.length; j++) {
 				EAF eaf = new EAF();
-				eaf.setData(dadosEAF[0]);
-				eaf.setSe(dadosEAF[1]);
-				eaf.setSu(dadosEAF[2]);
-				eaf.setNe(dadosEAF[3]);
-				eaf.setNo(dadosEAF[4]);
+				eaf.setData(dadosEAF[1]);
+				eaf.setSe(dadosEAF[2]);
+				eaf.setSu(dadosEAF[3]);
+				eaf.setNe(dadosEAF[4]);
+				eaf.setNo(dadosEAF[5]);
+				listEAF.add(eaf);
 			}
-			dadosEAF = null;
 		}
+		
+		Map<EAF, Integer> eafMAP = new LinkedHashMap<>();
+		for (EAF eaf : listEAF) {
+		   if (!eafMAP.containsKey(eaf)) {
+			   eafMAP.put(eaf,eaf.getIndex());
+		   }
+		}
+		
+		listEAF.clear();
+		listEAF.addAll(eafMAP.keySet());
+		
 		return listEAF;
 	}
 	
@@ -166,6 +172,34 @@ public class Formatter {
         };
         dataList = Arrays.asList(dataArray);
         return dataList;
+	}
+	
+	public List<String[]> cleanList(List<String[]> listString){
+		List<String[]> allLineClean = new ArrayList<String[]>();
+		for (String[] strings : listString) {
+			List<String> line = new ArrayList<String>();
+			List<String> lineClean = new ArrayList<String>();
+			line = Arrays.asList(strings);
+			for (String string : line) {
+				if(string != null && string != ""){
+					lineClean.add(string);
+				}
+			}
+			allLineClean.add((String[]) lineClean.toArray());
+		}
+		return allLineClean;
+	}
+	
+	public String[] getLineArrayClean(String string){
+		String[] list = string.split(" ");
+		List<String> lineClean = new ArrayList<String>();
+		for (String st : list) {
+			if(st != null && !st.isEmpty()){
+				lineClean.add(st);
+			}
+		}
+		
+		return lineClean.toArray(new String[lineClean.size()]);
 	}
 
 	public FileREL getFileREL() {
