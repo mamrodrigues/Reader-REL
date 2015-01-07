@@ -52,7 +52,9 @@ public class Reader {
 		try {
 			FileReader reader = new FileReader(file);
 			BufferedReader buffReader = new BufferedReader(reader);
-			while (buffReader.readLine() != null) {
+			for(int i=0; i< 1419; i++){ 
+				/*TODO - Marcos verificar como pegar o numero de linhas do documento antes de ler e inserir no array, 
+				pois com o while verificando enquanto não for null ele pulava varias linhas.*/
 				listContent.add(buffReader.readLine());
 			}
 			buffReader.close();

@@ -33,13 +33,74 @@ public class Formatter {
 	
 	private List<String[]> getTop() {
 		List<String[]> dataList = new ArrayList<String[]>();
+		
+		List<String> Meses = getMeses();
+				
+		String mesInicial = Meses.get(0);
+		String mesFinal = Meses.get(1);
+		//TODO Marcos temos que melhorar isso. Pois está executando o getMeses 2 vezes
+				
         String[][] dataArray = new String[][]{
-             {" ","MES INICIAL"," 10/2014","1"},
-             {" ","MES FINAL"," 11/2014","2"}
+             {" ",mesInicial.substring(0, 13),mesInicial.substring(14, 21)},
+             {" ",mesFinal.substring(0, 13),mesFinal.substring(14, 21)}
              //TODO Tirar os dados fixos e pegar do arquivo
         };
         dataList = Arrays.asList(dataArray);
 		return dataList;
+	}
+	
+	private int getQtdMeses(){
+		int qtdMeses = 0;
+		List<String> Meses = getMeses();
+		
+		String mesInicial = Meses.get(0);
+		String mesFinal = Meses.get(1);
+		
+		int mesInicio = Integer.parseInt(mesInicial.substring(14,16));
+		int mesFim = Integer.parseInt(mesFinal.substring(14,16));
+		int anoInicio = Integer.parseInt(mesInicial.substring(19,21));
+		int anoFim = Integer.parseInt(mesFinal.substring(19,21));
+
+		
+		
+		if(anoInicio < anoFim || anoInicio != anoFim){
+			int anos = anoFim - anoInicio;
+			anos = anos * 12;
+			qtdMeses = (mesFim+anos) - mesInicio;
+			
+		}
+		else{
+			qtdMeses = mesFim - mesInicio;
+		}
+		
+		
+		return qtdMeses;
+	}
+	
+	private List<String> getMeses(){
+		String mesInicial = null;
+		String mesFinal = null;
+		List<String> Meses = new ArrayList<String>();
+		
+		for (int index = 0; index < fileREL.getContent().size(); index++) {
+			String search = fileREL.getContent().get(index);
+			if (search.contains("MES INICIAL") || search.contains("mes inicial")) {
+				int indexDataInicial =  index;
+					search = fileREL.getContent().get(indexDataInicial).trim();
+					mesInicial = search;	
+			}
+			if(search.contains("MES FINAL") || search.contains("mes final")) {
+				int indexDataInicial =  index;
+					search = fileREL.getContent().get(indexDataInicial).trim();
+					mesFinal = search;	
+			}
+			search = "";
+		}
+		
+		Meses.add(mesInicial);
+		Meses.add(mesFinal);
+		
+		return Meses;
 	}
 	
 	private List<String[]> getHeader() {
