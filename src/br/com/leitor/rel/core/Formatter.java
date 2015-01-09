@@ -114,16 +114,20 @@ public class Formatter {
 
 		for (int index = 0; index < fileREL.getContent().size(); index++) {
 			String search = fileREL.getContent().get(index);
-			if (search.contains("C.MARG.AGUA") || search.contains("c.marg.agua")) {
+			int validador = 0;
+			if ((search.contains("C.MARG.AGUA") || search.contains("c.marg.agua")) && validador==0) {
+				validador = 1;
 				for(int i=index; i<index+9; i++){
 					search = fileREL.getContent().get(i).trim();
 					if(!search.isEmpty() && (search.contains("C.MARG.AGUA") || search.contains("PAT"))){
 					PAT.add(search);
 					}
+					search = "";
 				}
+				
 			}
 			
-			search = "";
+		
 		}
 		return PAT;
 	}
@@ -133,10 +137,9 @@ public class Formatter {
 		List<String[]> retorno = new ArrayList<String[]>();
 		for(int i=0; i<pat.size(); i++)
 		{
-			String[] ListaPATSplit = pat.get(i).split(" ");
-			retorno.add(ListaPATSplit);
+			retorno.add(getLineArrayClean(pat.get(i)));
 		}
-		retorno = cleanList(retorno);		
+
 		return retorno;
 	}
 	
@@ -216,17 +219,17 @@ public class Formatter {
 		return listEAF;
 	}
 	
-	
+	// Mano //TODO o cmo ai embaixo está trazendo uma lista de array já com todos os pat que existe no documento, este é o erro. Depois te explico!!!
 	private List<String[]> getData(){
 		List<String[]> dataList = new ArrayList<String[]>();
 		int meses = getQtdMeses();
-		for (int i = 1; i<meses ;i++){
-			List<String[]> CMO = getCMODados();
+		for (int i = 0; i<meses ;i++){
+			List<String[]> cmo = getCMODados();
 	        String[][] dataArray = new String[][]{
-	        		{""+i,"C.MARG.AGUA"},
-	                {""+i,"CMO","PAT1"},
-	                {""+i,"CMO","PAT2"},
-	                {""+i,"CMO","PAT3"},
+	        		{""+i,"C.MARG.AGUA","",cmo.get(0)[1],cmo.get(0)[2],cmo.get(0)[3],cmo.get(0)[4]},
+	                {""+i,"CMO","PAT1",cmo.get(1)[3],cmo.get(1)[4],cmo.get(1)[5],cmo.get(1)[6]},
+	                {""+i,"CMO","PAT2",cmo.get(2)[2],cmo.get(2)[3],cmo.get(2)[4],cmo.get(2)[5]},
+	                {""+i,"CMO","PAT3",cmo.get(3)[2],cmo.get(3)[3],cmo.get(3)[4],cmo.get(3)[5]},
 	                {""+i,"EARMI"},
 	                {""+i,"EARMF"},
 	                {""+i,"EVERT"},
@@ -274,21 +277,21 @@ public class Formatter {
         return dataList;
 	}
 	
-	public List<String[]> cleanList(List<String[]> listString){
-		List<String[]> allLineClean = new ArrayList<String[]>();
-		for (String[] strings : listString) {
-			List<String> line = new ArrayList<String>();
-			List<String> lineClean = new ArrayList<String>();
-			line = Arrays.asList(strings);
-			for (String string : line) {
-				if(string != null && string != ""){
-					lineClean.add(string);
-				}
-			}
-			allLineClean.add((String[]) lineClean.toArray());
-		}
-		return allLineClean;
-	}
+//	public List<String[]> cleanList(List<String[]> listString){
+//		List<String[]> allLineClean = new ArrayList<String[]>();
+//		for (String[] strings : listString) {
+//			List<String> line = new ArrayList<String>();
+//			List<String> lineClean = new ArrayList<String>();
+//			line = Arrays.asList(strings);
+//			for (String string : line) {
+//				if(string != null && string != ""){
+//					lineClean.add(string);
+//				}
+//			}
+//			allLineClean.add((String[]) lineClean.toArray());
+//		}
+//		return allLineClean;
+//	}
 	
 	public String[] getLineArrayClean(String string){
 		String[] list = string.split(" ");
