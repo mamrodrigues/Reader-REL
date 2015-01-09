@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -149,8 +150,7 @@ public class GuiLeitorREL {
 						fileXLS.setSheetName("SAIDA");
 						
 						Formatter formatter = new Formatter(fileREL, fileDAT);
-				        fileXLS.setListContent(formatter.FormatterXLS(new FileREL(), new FileDAT()));
-				        
+								fileXLS.setListContent(formatter.FormatterXLS(new FileREL(), new FileDAT()));
 				        Writer writer = new Writer();
 				        writer.generateXLS(fileXLS);	
 				        

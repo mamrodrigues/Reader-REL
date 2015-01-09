@@ -1,5 +1,9 @@
 package br.com.leitor.rel.core;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
@@ -22,7 +26,7 @@ public class Formatter {
 		this.fileDAT = fileDAT;
 	}
 
-	public List<String[]> FormatterXLS(FileREL fileREL, FileDAT fileDAT) {
+	public List<String[]> FormatterXLS(FileREL fileREL, FileDAT fileDAT){
 		List<String[]> dataList = new ArrayList<String[]>();
         dataList.addAll(getTop());
         dataList.addAll(getHeader());
@@ -103,6 +107,39 @@ public class Formatter {
 		return Meses;
 	}
 	
+	private List<String> getPATDados(){
+		
+		List<String> PAT = new ArrayList<String>();
+
+
+		for (int index = 0; index < fileREL.getContent().size(); index++) {
+			String search = fileREL.getContent().get(index);
+			if (search.contains("C.MARG.AGUA") || search.contains("c.marg.agua")) {
+				for(int i=index; i<index+9; i++){
+					search = fileREL.getContent().get(i).trim();
+					if(!search.isEmpty() && (search.contains("C.MARG.AGUA") || search.contains("PAT"))){
+					PAT.add(search);
+					}
+				}
+			}
+			
+			search = "";
+		}
+		return PAT;
+	}
+	
+	private List<String[]> getCMODados(){
+		List<String> pat = getPATDados();
+		List<String[]> retorno = new ArrayList<String[]>();
+		for(int i=0; i<pat.size(); i++)
+		{
+			String[] ListaPATSplit = pat.get(i).split(" ");
+			retorno.add(ListaPATSplit);
+		}
+		retorno = cleanList(retorno);		
+		return retorno;
+	}
+	
 	private List<String[]> getHeader() {
 		
 		List<EAF> listEAF = mapHeader();
@@ -180,9 +217,11 @@ public class Formatter {
 	}
 	
 	
-	private List<String[]> getData() {
+	private List<String[]> getData(){
 		List<String[]> dataList = new ArrayList<String[]>();
-		for (int i = 1; i<12 ;i++){
+		int meses = getQtdMeses();
+		for (int i = 1; i<meses ;i++){
+			List<String[]> CMO = getCMODados();
 	        String[][] dataArray = new String[][]{
 	        		{""+i,"C.MARG.AGUA"},
 	                {""+i,"CMO","PAT1"},
