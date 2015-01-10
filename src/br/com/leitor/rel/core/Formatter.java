@@ -224,7 +224,9 @@ public class Formatter {
 		List<String[]> dataList = new ArrayList<String[]>();
 		int meses = getQtdMeses();
 		for (int i = 0; i<meses ;i++){
+			int valoresCmo = 4;
 			List<String[]> cmo = getCMODados();
+			if(i == 0){
 	        String[][] dataArray = new String[][]{
 	        		{""+i,"C.MARG.AGUA","",cmo.get(0)[1],cmo.get(0)[2],cmo.get(0)[3],cmo.get(0)[4]},
 	                {""+i,"CMO","PAT1",cmo.get(1)[3],cmo.get(1)[4],cmo.get(1)[5],cmo.get(1)[6]},
@@ -250,7 +252,38 @@ public class Formatter {
 	                {""+i,"EMORTO"}
 	                //TODO Tirar os dados fixos e pegar do arquivo
 	           };
+	        
 	        dataList.addAll(Arrays.asList(dataArray));
+			}
+			else{
+				String[][] dataArray = new String[][]{
+		        		{""+i,"C.MARG.AGUA","",cmo.get(0+valoresCmo)[1],cmo.get(0+valoresCmo)[2],cmo.get(0+valoresCmo)[3],cmo.get(0+valoresCmo)[4]},
+		                {""+i,"CMO","PAT1",cmo.get(1+valoresCmo)[3],cmo.get(1+valoresCmo)[4],cmo.get(1+valoresCmo)[5],cmo.get(1+valoresCmo)[6]},
+		                {""+i,"CMO","PAT2",cmo.get(2+valoresCmo)[2],cmo.get(2+valoresCmo)[3],cmo.get(2+valoresCmo)[4],cmo.get(2+valoresCmo)[5]},
+		                {""+i,"CMO","PAT3",cmo.get(3+valoresCmo)[2],cmo.get(3+valoresCmo)[3],cmo.get(3+valoresCmo)[4],cmo.get(3+valoresCmo)[5]},
+		                {""+i,"EARMI"},
+		                {""+i,"EARMF"},
+		                {""+i,"EVERT"},
+		                {""+i,"ECONT"},
+		                {""+i,"ECONTC"},
+		                {""+i,"EFIOB"},
+		                {""+i,"EFIOL"},
+		                {""+i,"GFIOL"},
+		                {""+i,"PFIONTURB"},
+		                {""+i,"PERDA FIO"},
+		                {""+i,"META EVMIN"},
+		                {""+i,"EVMIN"},
+		                {""+i,"META DSVC"},
+		                {""+i,"DSVAGUA"},
+		                {""+i,"META DSVF"},
+		                {""+i,"DSVAGUA FIO"},
+		                {""+i,"EVAPORACAO"},
+		                {""+i,"EMORTO"}
+		                //TODO Tirar os dados fixos e pegar do arquivo
+		           };
+		        
+		        dataList.addAll(Arrays.asList(dataArray));
+			}
 		}
 		return dataList;
 	}
