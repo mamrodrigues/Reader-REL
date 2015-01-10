@@ -224,7 +224,7 @@ public class Formatter {
 		List<String[]> dataList = new ArrayList<String[]>();
 		int meses = getQtdMeses();
 		for (int i = 0; i<meses ;i++){
-			int valoresCmo = 4;
+			
 			List<String[]> cmo = getCMODados();
 			if(i == 0){
 	        String[][] dataArray = new String[][]{
@@ -256,11 +256,15 @@ public class Formatter {
 	        dataList.addAll(Arrays.asList(dataArray));
 			}
 			else{
+				int agua = 0 + 4*i;
+				int pat1 = 1 + 4*i;
+				int pat2 = 2 + 4*i;
+				int pat3 = 3 + 4*i;
 				String[][] dataArray = new String[][]{
-		        		{""+i,"C.MARG.AGUA","",cmo.get(0+valoresCmo)[1],cmo.get(0+valoresCmo)[2],cmo.get(0+valoresCmo)[3],cmo.get(0+valoresCmo)[4]},
-		                {""+i,"CMO","PAT1",cmo.get(1+valoresCmo)[3],cmo.get(1+valoresCmo)[4],cmo.get(1+valoresCmo)[5],cmo.get(1+valoresCmo)[6]},
-		                {""+i,"CMO","PAT2",cmo.get(2+valoresCmo)[2],cmo.get(2+valoresCmo)[3],cmo.get(2+valoresCmo)[4],cmo.get(2+valoresCmo)[5]},
-		                {""+i,"CMO","PAT3",cmo.get(3+valoresCmo)[2],cmo.get(3+valoresCmo)[3],cmo.get(3+valoresCmo)[4],cmo.get(3+valoresCmo)[5]},
+		        		{""+i,"C.MARG.AGUA","",cmo.get(agua)[1],cmo.get(agua)[2],cmo.get(agua)[3],cmo.get(agua)[4]},
+		                {""+i,"CMO","PAT1",cmo.get(pat1)[3],cmo.get(pat1)[4],cmo.get(pat1)[5],cmo.get(pat1)[6]},
+		                {""+i,"CMO","PAT2",cmo.get(pat2)[2],cmo.get(pat2)[3],cmo.get(pat2)[4],cmo.get(pat2)[5]},
+		                {""+i,"CMO","PAT3",cmo.get(pat3)[2],cmo.get(pat3)[3],cmo.get(pat3)[4],cmo.get(pat3)[5]},
 		                {""+i,"EARMI"},
 		                {""+i,"EARMF"},
 		                {""+i,"EVERT"},
