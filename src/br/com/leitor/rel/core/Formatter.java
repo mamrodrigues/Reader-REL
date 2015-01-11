@@ -1,25 +1,21 @@
 package br.com.leitor.rel.core;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.sql.rowset.serial.SerialArray;
-
+import br.com.leitor.rel.model.CMO;
+import br.com.leitor.rel.model.EAF;
 import br.com.leitor.rel.model.FileDAT;
 import br.com.leitor.rel.model.FileREL;
-import br.com.leitor.rel.model.EAF;
 
 public class Formatter {
 	
 	private FileREL fileREL;
 	private FileDAT fileDAT;
+	private List<CMO> listCMO;
 	
 	public Formatter(FileREL fileREL, FileDAT fileDAT) {
 		this.fileREL = fileREL;
@@ -42,14 +38,10 @@ public class Formatter {
 				
 		String mesInicial = Meses.get(0);
 		String mesFinal = Meses.get(1);
-		//TODO Marcos temos que melhorar isso. Pois está executando o getMeses 2 vezes
-		//RESOLVIDO
 				
         String[][] dataArray = new String[][]{
              {" ",mesInicial.substring(0, 13),mesInicial.substring(14, 21)},
              {" ",mesFinal.substring(0, 13),mesFinal.substring(14, 21)}
-             //TODO Tirar os dados fixos e pegar do arquivo
-             //IMPLEMENTADO
         };
         dataList = Arrays.asList(dataArray);
 		return dataList;
@@ -72,8 +64,7 @@ public class Formatter {
 			anos = anos * 12;
 			qtdMeses = (mesFim+anos) - mesInicio;
 			
-		}
-		else{
+		}else{
 			qtdMeses = mesFim - mesInicio;
 		}
 		
@@ -83,33 +74,40 @@ public class Formatter {
 	private List<String> getMeses(){
 		String mesInicial = null;
 		String mesFinal = null;
-		List<String> Meses = new ArrayList<String>();
+		List<String> meses = new ArrayList<String>();
 		
 		for (int index = 0; index < fileREL.getContent().size(); index++) {
 			String search = fileREL.getContent().get(index);
 			if (search.contains("MES INICIAL") || search.contains("mes inicial")) {
 				int indexDataInicial =  index;
 					search = fileREL.getContent().get(indexDataInicial).trim();
-					mesInicial = search;	
+					mesInicial = search;
+					String[] arrayMesAnoInicial = search.split("/");
+					arrayMesAnoInicial[0] = arrayMesAnoInicial[0].substring(arrayMesAnoInicial[0].length()-2, arrayMesAnoInicial[0].length()).trim();	
+					fileREL.setMesInicial(arrayMesAnoInicial[0]);
+					fileREL.setAnoInicial(Integer.parseInt(arrayMesAnoInicial[1].trim()));
 			}
 			if(search.contains("MES FINAL") || search.contains("mes final")) {
 				int indexDataInicial =  index;
 					search = fileREL.getContent().get(indexDataInicial).trim();
-					mesFinal = search;	
+					mesFinal = search;
+					String[] arrayMesAnoFinal = search.split("/");
+					arrayMesAnoFinal[0] = arrayMesAnoFinal[0].substring(arrayMesAnoFinal[0].length()-2, arrayMesAnoFinal[0].length()).trim();
+					fileREL.setMesFinal(arrayMesAnoFinal[0]);	
+					fileREL.setAnoFinal(Integer.parseInt(arrayMesAnoFinal[1].trim()));
 			}
 			search = "";
 		}
 		
-		Meses.add(mesInicial);
-		Meses.add(mesFinal);
+		meses.add(mesInicial);
+		meses.add(mesFinal);
 		
-		return Meses;
+		return meses;
 	}
 	
 	private List<String> getPATDados(){
 		
-		List<String> PAT = new ArrayList<String>();
-
+		List<String> pat = new ArrayList<String>();
 
 		for (int index = 0; index < fileREL.getContent().size(); index++) {
 			String search = fileREL.getContent().get(index);
@@ -119,16 +117,13 @@ public class Formatter {
 				for(int i=index; i<index+9; i++){
 					search = fileREL.getContent().get(i).trim();
 					if(!search.isEmpty() && (search.contains("C.MARG.AGUA") || search.contains("PAT"))){
-					PAT.add(search);
+					pat.add(search);
 					}
 					search = "";
 				}
-				
 			}
-			
-		
 		}
-		return PAT;
+		return pat;
 	}
 	
 	private List<String[]> getCMODados(){
@@ -220,10 +215,12 @@ public class Formatter {
 	
 	private List<String[]> getData(){
 		List<String[]> dataList = new ArrayList<String[]>();
+		
 		int meses = getQtdMeses();
 		for (int i = 0; i<meses ;i++){
 			
 			List<String[]> cmo = getCMODados();
+			
 			if(i == 0){
 	        String[][] dataArray = new String[][]{
 	        		{""+i,"C.MARG.AGUA","",cmo.get(0)[1],cmo.get(0)[2],cmo.get(0)[3],cmo.get(0)[4]},
@@ -249,6 +246,17 @@ public class Formatter {
 	                {""+i,"EVAPORACAO"},
 	                {""+i,"EMORTO"}
 	           };
+	        
+//	        CMO cmoData = new CMO();
+//	        PAT patData = new PAT();
+//	        cmoData.setMes(fileREL.getMesInicial());
+//	        patData.setSe(cmo.get(1)[3]);
+//	        patData.setSu(cmo.get(1)[4]);
+//	        patData.setNe(cmo.get(1)[5]);
+//	        patData.setNo(cmo.get(1)[6]);
+//	        cmoData.setPat(patData);
+//	        
+//	        cmoList.add(cmoData);
 	        
 	        dataList.addAll(Arrays.asList(dataArray));
 			}
@@ -290,41 +298,60 @@ public class Formatter {
 	
 	private List<String[]> getFooter() {
 		List<String[]> dataList = new ArrayList<String[]>();
-        String[][] dataArray = new String[][]{
-        		{" "," "," ","SE","SU","NE","NO"},
-                {"1","CMO","MÊS INICIAL1"},
-                {"2","CMO","MÊS INICIAL2"},
-                {"3","CMO","MÊS INICIAL3"},
-                {"4","CMO","MÊS INICIAL4"},
-                {"5","CMO","MÊS INICIAL5"},
-                {"6","CMO","MÊS INICIAL6"},
-                {"7","CMO","MÊS INICIAL7"},
-                {"8","CMO","MÊS INICIAL8"},
-                {"9","CMO","MÊS INICIAL9"},
-                {"10","CMO","MÊS INICIAL10"},
-                {"11","CMO","MÊS INICIAL11"},
-                {"12","CMO","MÊS INICIAL12"}
-                //TODO Tirar os dados fixos e pegar do arquivo
-        };
-        dataList = Arrays.asList(dataArray);
+		int meses = getQtdMeses();
+		List<String[]> cmo = getCMODados();
+		
+		String[][] indiceDataArray = new String[][]{{" "," "," ","SE","SU","NE","NO"}};
+		
+		List<String> listStringDAT = getDadosPatamar(fileREL.getAnoInicial(),fileREL.getMesInicial(),fileREL.getAnoFinal(),fileREL.getMesFinal());
+		for (String string : listStringDAT) {
+			System.out.println(string);
+		}
+		
+		String[][] dataArray = null;
+		for (int i = 0; i<meses ;i++){
+			int pat = 1 + 4*i;
+			int mes = Integer.parseInt(fileREL.getMesInicial())+i;
+			dataArray = new String[][]{
+                {String.valueOf(i),"CMO","MÊS INICIAL "+mes,cmo.get(pat)[3],cmo.get(pat)[4],cmo.get(pat)[5],cmo.get(pat)[6]}
+			};
+		}
+		
+		dataList.addAll(Arrays.asList(indiceDataArray));
+		dataList.addAll(Arrays.asList(dataArray));
+		
         return dataList;
 	}
 	
-//	public List<String[]> cleanList(List<String[]> listString){
-//		List<String[]> allLineClean = new ArrayList<String[]>();
-//		for (String[] strings : listString) {
-//			List<String> line = new ArrayList<String>();
-//			List<String> lineClean = new ArrayList<String>();
-//			line = Arrays.asList(strings);
-//			for (String string : line) {
-//				if(string != null && string != ""){
-//					lineClean.add(string);
-//				}
-//			}
-//			allLineClean.add((String[]) lineClean.toArray());
-//		}
-//		return allLineClean;
-//	}
+	public List<String> getDadosPatamar(int anoInicial, String mesInicial, int anoFinal, String mesFinal){
+		List<String> listStringDAT = new ArrayList<String>();
+		for (int index = 0; index < fileDAT.getContent().size(); index++) {
+			String search = fileDAT.getContent().get(index);
+			if (search.contains(""+anoInicial+"")) {
+				int indexDAT =  index;
+				while(!fileDAT.getContent().get(indexDAT).isEmpty() && (indexDAT < index+3)){
+					search = fileDAT.getContent().get(indexDAT).trim();
+					if (search.startsWith("2014")) {
+						search = search.substring(4, search.length()).trim();
+						listStringDAT.add(search);
+					}else{
+						listStringDAT.add(search);
+					}
+					search = "";
+					indexDAT++;
+				}
+				break;
+			}
+			search = "";
+		}
+		
+		for (String string : listStringDAT) {
+			//TODO CALCULO DOS 3 CMOS DOS MESES
+			String[] list = string.split(" ");
+		}
+		
+		return listStringDAT;
+	}
 	
 	public String[] getLineArrayClean(String string){
 		String[] list = string.split(" ");
@@ -352,6 +379,14 @@ public class Formatter {
 
 	public void setFileDAT(FileDAT fileDAT) {
 		this.fileDAT = fileDAT;
+	}
+
+	public List<CMO> getListCMO() {
+		return listCMO;
+	}
+
+	public void setListCMO(List<CMO> listCMO) {
+		this.listCMO = listCMO;
 	}
 
 }

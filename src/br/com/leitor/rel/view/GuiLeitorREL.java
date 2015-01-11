@@ -142,8 +142,6 @@ public class GuiLeitorREL {
 						String pathCaso = path.concat("/CASO-0"+index);
 						File pastaCaso = new File(pathCaso);
 						pastaCaso.mkdir();
-//						GeradorXLS geradorXLS = new GeradorXLS();
-//						geradorXLS.gerarArquivoXLS(fileREL,fileDAT,pathCaso);
 						
 						FileXLS fileXLS = new FileXLS();
 						fileXLS.setPath(destinoSalvar.getText()+"/SAIDA-DESEJADA.xls");
