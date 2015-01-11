@@ -327,18 +327,51 @@ public class Formatter {
 		List<String> listStringDAT = new ArrayList<String>();
 		for (int index = 0; index < fileDAT.getContent().size(); index++) {
 			String search = fileDAT.getContent().get(index);
-			if (search.contains(""+anoInicial+"")) {
-				int indexDAT =  index;
-				while(!fileDAT.getContent().get(indexDAT).isEmpty() && (indexDAT < index+3)){
-					search = fileDAT.getContent().get(indexDAT).trim();
-					if (search.startsWith("2014")) {
-						search = search.substring(4, search.length()).trim();
-						listStringDAT.add(search);
-					}else{
-						listStringDAT.add(search);
+			if(anoInicial==anoFinal){
+				if (search.contains(""+anoInicial+"")) {
+					int indexDAT =  index;
+					while(!fileDAT.getContent().get(indexDAT).isEmpty() && (indexDAT < index+3)){
+						search = fileDAT.getContent().get(indexDAT).trim();
+						if (search.startsWith("2014")) {
+							search = search.substring(4, search.length()).trim();
+							listStringDAT.add(search);
+						}else{
+							listStringDAT.add(search);
+						}
+						search = "";
+						indexDAT++;
 					}
-					search = "";
-					indexDAT++;
+					break;
+				}
+				search = "";
+			}else{
+				if(search.contains(""+anoInicial+"")) {
+					int indexDAT =  index;
+					while(!fileDAT.getContent().get(indexDAT).isEmpty() && (indexDAT < index+3)){
+						search = fileDAT.getContent().get(indexDAT).trim();
+						if (search.startsWith("2014")) {
+							search = search.substring(4, search.length()).trim();
+							listStringDAT.add(search);
+						}else{
+							listStringDAT.add(search);
+						}
+						search = "";
+						indexDAT++;
+					}
+				}
+				if(search.contains(""+anoFinal+"")) {
+					int indexDAT =  index;
+					while(!fileDAT.getContent().get(indexDAT).isEmpty() && (indexDAT < index+3)){
+						search = fileDAT.getContent().get(indexDAT).trim();
+						if (search.startsWith("2014")) {
+							search = search.substring(4, search.length()).trim();
+							listStringDAT.add(search);
+						}else{
+							listStringDAT.add(search);
+						}
+						search = "";
+						indexDAT++;
+					}
 				}
 				break;
 			}
