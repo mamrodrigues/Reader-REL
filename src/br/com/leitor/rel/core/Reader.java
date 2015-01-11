@@ -19,12 +19,15 @@ public class Reader {
 		File directory = new File(path);
 		List<FileREL> listaFileREL = new ArrayList<FileREL>();
 		File[] files = directory.listFiles();
-
+		
 		for (File file : files) {
-			FileREL fileREL = new FileREL();
-			fileREL.setFile(file);
-			fileREL.setContent(getListContent(file));
-			listaFileREL.add(fileREL);
+			if (file.getName().endsWith(".rel") 
+					|| file.getName().endsWith(".REL")) {
+				FileREL fileREL = new FileREL();
+				fileREL.setFile(file);
+				fileREL.setContent(getListContent(file));
+				listaFileREL.add(fileREL);
+			}
 		}
 		return listaFileREL;
 	}
@@ -52,10 +55,10 @@ public class Reader {
 		try {
 			FileReader reader = new FileReader(file);
 			BufferedReader buffReader = new BufferedReader(reader);
-			for(int i=0; i< 1419; i++){ 
-				/*TODO - Marcos verificar como pegar o numero de linhas do documento antes de ler e inserir no array, 
-				pois com o while verificando enquanto não for null ele pulava varias linhas.*/
-				listContent.add(buffReader.readLine());
+			for(int i=0; i< 5000; i++){
+				if(buffReader.ready()){
+					listContent.add(buffReader.readLine()+"\n");
+				}
 			}
 			buffReader.close();
 		} catch (IOException io) {

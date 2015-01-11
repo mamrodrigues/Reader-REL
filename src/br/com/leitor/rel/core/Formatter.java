@@ -43,11 +43,13 @@ public class Formatter {
 		String mesInicial = Meses.get(0);
 		String mesFinal = Meses.get(1);
 		//TODO Marcos temos que melhorar isso. Pois está executando o getMeses 2 vezes
+		//RESOLVIDO
 				
         String[][] dataArray = new String[][]{
              {" ",mesInicial.substring(0, 13),mesInicial.substring(14, 21)},
              {" ",mesFinal.substring(0, 13),mesFinal.substring(14, 21)}
              //TODO Tirar os dados fixos e pegar do arquivo
+             //IMPLEMENTADO
         };
         dataList = Arrays.asList(dataArray);
 		return dataList;
@@ -64,8 +66,6 @@ public class Formatter {
 		int mesFim = Integer.parseInt(mesFinal.substring(14,16));
 		int anoInicio = Integer.parseInt(mesInicial.substring(19,21));
 		int anoFim = Integer.parseInt(mesFinal.substring(19,21));
-
-		
 		
 		if(anoInicio < anoFim || anoInicio != anoFim){
 			int anos = anoFim - anoInicio;
@@ -76,7 +76,6 @@ public class Formatter {
 		else{
 			qtdMeses = mesFim - mesInicio;
 		}
-		
 		
 		return qtdMeses;
 	}
@@ -180,7 +179,7 @@ public class Formatter {
 			String search = fileREL.getContent().get(index);
 			if (search.contains("EARMI") || search.contains("earmi")) {
 				int indexEAF =  index;
-				while(!fileREL.getContent().get(indexEAF).isEmpty()){
+				while(!fileREL.getContent().get(indexEAF).isEmpty() && (indexEAF<index+12)){
 					search = fileREL.getContent().get(indexEAF).trim();
 					listStringEAF.add(search);
 					search = "";
@@ -219,7 +218,6 @@ public class Formatter {
 		return listEAF;
 	}
 	
-	// Mano //TODO o cmo ai embaixo está trazendo uma lista de array já com todos os pat que existe no documento, este é o erro. Depois te explico!!!
 	private List<String[]> getData(){
 		List<String[]> dataList = new ArrayList<String[]>();
 		int meses = getQtdMeses();
@@ -250,7 +248,6 @@ public class Formatter {
 	                {""+i,"DSVAGUA FIO"},
 	                {""+i,"EVAPORACAO"},
 	                {""+i,"EMORTO"}
-	                //TODO Tirar os dados fixos e pegar do arquivo
 	           };
 	        
 	        dataList.addAll(Arrays.asList(dataArray));
@@ -283,7 +280,6 @@ public class Formatter {
 		                {""+i,"DSVAGUA FIO"},
 		                {""+i,"EVAPORACAO"},
 		                {""+i,"EMORTO"}
-		                //TODO Tirar os dados fixos e pegar do arquivo
 		           };
 		        
 		        dataList.addAll(Arrays.asList(dataArray));
