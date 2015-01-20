@@ -27,7 +27,7 @@ public class Formatter {
         dataList.addAll(getTop());
         dataList.addAll(getHeader());
         dataList.addAll(getData());
-        dataList.addAll(getFooter());
+       // dataList.addAll(getFooter());
 		return dataList;
 	}
 	
@@ -54,10 +54,12 @@ public class Formatter {
 		String mesInicial = Meses.get(0);
 		String mesFinal = Meses.get(1);
 		
-		int mesInicio = Integer.parseInt(mesInicial.substring(14,16));
-		int mesFim = Integer.parseInt(mesFinal.substring(14,16));
-		int anoInicio = Integer.parseInt(mesInicial.substring(19,21));
-		int anoFim = Integer.parseInt(mesFinal.substring(19,21));
+		String teste = mesInicial.substring(13,16).trim();
+		
+		int mesInicio = Integer.parseInt(mesInicial.substring(13,16).trim());
+		int mesFim = Integer.parseInt(mesFinal.substring(13,16).trim());
+		int anoInicio = Integer.parseInt(mesInicial.substring(19,21).trim());
+		int anoFim = Integer.parseInt(mesFinal.substring(19,21).trim());
 		
 		if(anoInicio < anoFim || anoInicio != anoFim){
 			int anos = anoFim - anoInicio;
@@ -132,6 +134,38 @@ public class Formatter {
 		for(int i=0; i<pat.size(); i++)
 		{
 			retorno.add(getLineArrayClean(pat.get(i)));
+		}
+
+		return retorno;
+	}
+	
+	private List<String> getDocumentoEARMItoEMORTODados(){
+		
+		List<String> earmiToEmorto = new ArrayList<String>();
+
+		for (int index = 0; index < fileREL.getContent().size(); index++) {
+			String search = fileREL.getContent().get(index);
+			int validador = 0;
+			if ((search.contains("C.MARG.AGUA") || search.contains("c.marg.agua")) && validador==0) {
+				validador = 1;
+				for(int i=index; i<index+9; i++){
+					search = fileREL.getContent().get(i).trim();
+					if(!search.isEmpty() && (search.contains("C.MARG.AGUA") || search.contains("PAT"))){
+					earmiToEmorto.add(search);
+					}
+					search = "";
+				}
+			}
+		}
+		return earmiToEmorto;
+	}
+	
+	private List<String[]> getEARMItoEMORTODados(){
+		List<String> earmiToEmorto = getDocumentoEARMItoEMORTODados();
+		List<String[]> retorno = new ArrayList<String[]>();
+		for(int i=0; i<earmiToEmorto.size(); i++)
+		{
+			retorno.add(getLineArrayClean(earmiToEmorto.get(i)));
 		}
 
 		return retorno;
@@ -217,84 +251,76 @@ public class Formatter {
 		List<String[]> dataList = new ArrayList<String[]>();
 		
 		int meses = getQtdMeses();
-		for (int i = 0; i<meses ;i++){
 			
 			List<String[]> cmo = getCMODados();
-			
-			if(i == 0){
+						
 	        String[][] dataArray = new String[][]{
-	        		{""+i,"C.MARG.AGUA","",cmo.get(0)[1],cmo.get(0)[2],cmo.get(0)[3],cmo.get(0)[4]},
-	                {""+i,"CMO","PAT1",cmo.get(1)[3],cmo.get(1)[4],cmo.get(1)[5],cmo.get(1)[6]},
-	                {""+i,"CMO","PAT2",cmo.get(2)[2],cmo.get(2)[3],cmo.get(2)[4],cmo.get(2)[5]},
-	                {""+i,"CMO","PAT3",cmo.get(3)[2],cmo.get(3)[3],cmo.get(3)[4],cmo.get(3)[5]},
-	                {""+i,"EARMI"},
-	                {""+i,"EARMF"},
-	                {""+i,"EVERT"},
-	                {""+i,"ECONT"},
-	                {""+i,"ECONTC"},
-	                {""+i,"EFIOB"},
-	                {""+i,"EFIOL"},
-	                {""+i,"GFIOL"},
-	                {""+i,"PFIONTURB"},
-	                {""+i,"PERDA FIO"},
-	                {""+i,"META EVMIN"},
-	                {""+i,"EVMIN"},
-	                {""+i,"META DSVC"},
-	                {""+i,"DSVAGUA"},
-	                {""+i,"META DSVF"},
-	                {""+i,"DSVAGUA FIO"},
-	                {""+i,"EVAPORACAO"},
-	                {""+i,"EMORTO"}
+	        		{"","C.MARG.AGUA","",cmo.get(0)[1],cmo.get(0)[2],cmo.get(0)[3],cmo.get(0)[4]},
+	                {"","CMO","PAT1",cmo.get(1)[3],cmo.get(1)[4],cmo.get(1)[5],cmo.get(1)[6]},
+	                {"","CMO","PAT2",cmo.get(2)[2],cmo.get(2)[3],cmo.get(2)[4],cmo.get(2)[5]},
+	                {"","CMO","PAT3",cmo.get(3)[2],cmo.get(3)[3],cmo.get(3)[4],cmo.get(3)[5]},
+	                {"","EARMI"},
+	                {"","EARMF"},
+	                {"","EVERT"},
+	                {"","ECONT"},
+	                {"","ECONTC"},
+	                {"","EFIOB"},
+	                {"","EFIOL"},
+	                {"","GFIOL"},
+	                {"","PFIONTURB"},
+	                {"","PERDA FIO"},
+	                {"","META EVMIN"},
+	                {"","EVMIN"},
+	                {"","META DSVC"},
+	                {"","DSVAGUA"},
+	                {"","META DSVF"},
+	                {"","DSVAGUA FIO"},
+	                {"","EVAPORACAO"},
+	                {"","EMORTO"}
 	           };
-	        
-//	        CMO cmoData = new CMO();
-//	        PAT patData = new PAT();
-//	        cmoData.setMes(fileREL.getMesInicial());
-//	        patData.setSe(cmo.get(1)[3]);
-//	        patData.setSu(cmo.get(1)[4]);
-//	        patData.setNe(cmo.get(1)[5]);
-//	        patData.setNo(cmo.get(1)[6]);
-//	        cmoData.setPat(patData);
-//	        
-//	        cmoList.add(cmoData);
+			
 	        
 	        dataList.addAll(Arrays.asList(dataArray));
-			}
-			else{
-				int agua = 0 + 4*i;
-				int pat1 = 1 + 4*i;
-				int pat2 = 2 + 4*i;
-				int pat3 = 3 + 4*i;
-				String[][] dataArray = new String[][]{
-		        		{""+i,"C.MARG.AGUA","",cmo.get(agua)[1],cmo.get(agua)[2],cmo.get(agua)[3],cmo.get(agua)[4]},
-		                {""+i,"CMO","PAT1",cmo.get(pat1)[3],cmo.get(pat1)[4],cmo.get(pat1)[5],cmo.get(pat1)[6]},
-		                {""+i,"CMO","PAT2",cmo.get(pat2)[2],cmo.get(pat2)[3],cmo.get(pat2)[4],cmo.get(pat2)[5]},
-		                {""+i,"CMO","PAT3",cmo.get(pat3)[2],cmo.get(pat3)[3],cmo.get(pat3)[4],cmo.get(pat3)[5]},
-		                {""+i,"EARMI"},
-		                {""+i,"EARMF"},
-		                {""+i,"EVERT"},
-		                {""+i,"ECONT"},
-		                {""+i,"ECONTC"},
-		                {""+i,"EFIOB"},
-		                {""+i,"EFIOL"},
-		                {""+i,"GFIOL"},
-		                {""+i,"PFIONTURB"},
-		                {""+i,"PERDA FIO"},
-		                {""+i,"META EVMIN"},
-		                {""+i,"EVMIN"},
-		                {""+i,"META DSVC"},
-		                {""+i,"DSVAGUA"},
-		                {""+i,"META DSVF"},
-		                {""+i,"DSVAGUA FIO"},
-		                {""+i,"EVAPORACAO"},
-		                {""+i,"EMORTO"}
+			
+				int size = (cmo.size()/4);
+				for(int numeroCMO = 0; numeroCMO<size; numeroCMO++){
+				if(numeroCMO != 0){
+				int agua = (0+4*numeroCMO);
+				int pat1 = (1+4*numeroCMO);
+				int pat2 = (2+4*numeroCMO);
+				int pat3 = (3+4*numeroCMO);
+				String[][] dataArray2 = new String[][]{
+		        		{"","C.MARG.AGUA","",cmo.get(agua)[1],cmo.get(agua)[2],cmo.get(agua)[3],cmo.get(agua)[4]},
+		                {"","CMO","PAT1",cmo.get(pat1)[3],cmo.get(pat1)[4],cmo.get(pat1)[5],cmo.get(pat1)[6]},
+		                {"","CMO","PAT2",cmo.get(pat2)[2],cmo.get(pat2)[3],cmo.get(pat2)[4],cmo.get(pat2)[5]},
+		                {"","CMO","PAT3",cmo.get(pat3)[2],cmo.get(pat3)[3],cmo.get(pat3)[4],cmo.get(pat3)[5]},
+		                {"","EARMI"},
+		                {"","EARMF"},
+		                {"","EVERT"},
+		                {"","ECONT"},
+		                {"","ECONTC"},
+		                {"","EFIOB"},
+		                {"","EFIOL"},
+		                {"","GFIOL"},
+		                {"","PFIONTURB"},
+		                {"","PERDA FIO"},
+		                {"","META EVMIN"},
+		                {"","EVMIN"},
+		                {"","META DSVC"},
+		                {"","DSVAGUA"},
+		                {"","META DSVF"},
+		                {"","DSVAGUA FIO"},
+		                {"","EVAPORACAO"},
+		                {"","EMORTO"}
 		           };
 		        
-		        dataList.addAll(Arrays.asList(dataArray));
-			}
-		}
+		        dataList.addAll(Arrays.asList(dataArray2));
+					}
+				}
+			
+		
 		return dataList;
-	}
+}
 	
 	private List<String[]> getFooter() {
 		List<String[]> dataList = new ArrayList<String[]>();
@@ -313,14 +339,14 @@ public class Formatter {
 			int pat = 1 + 4*i;
 			int mes = Integer.parseInt(fileREL.getMesInicial())+i;
 			dataArray = new String[][]{
-                {String.valueOf(i),"CMO","MÊS INICIAL "+mes,cmo.get(pat)[3],cmo.get(pat)[4],cmo.get(pat)[5],cmo.get(pat)[6]}
+           //     {String.valueOf(i),"CMO","MÊS INICIAL "+mes,cmo.get(pat)[3],cmo.get(pat)[4],cmo.get(pat)[5],cmo.get(pat)[6]}
 			};
 		}
 		
 		dataList.addAll(Arrays.asList(indiceDataArray));
 		dataList.addAll(Arrays.asList(dataArray));
 		
-        return dataList;
+        return null;
 	}
 	
 	public List<String> getDadosPatamar(int anoInicial, String mesInicial, int anoFinal, String mesFinal){

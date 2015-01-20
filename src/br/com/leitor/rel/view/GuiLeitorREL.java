@@ -144,8 +144,8 @@ public class GuiLeitorREL {
 						pastaCaso.mkdir();
 						
 						FileXLS fileXLS = new FileXLS();
-						fileXLS.setPath(destinoSalvar.getText()+"/SAIDA-DESEJADA.xls");
-						fileXLS.setSheetName("SAIDA");
+						fileXLS.setPath(pathCaso+"/"+fileREL.getFile().getName().replace(".rel", "")+".xls");
+						fileXLS.setSheetName("Tabela Verificação");
 						
 						Formatter formatter = new Formatter(fileREL, fileDAT);
 								fileXLS.setListContent(formatter.FormatterXLS(new FileREL(), new FileDAT()));
