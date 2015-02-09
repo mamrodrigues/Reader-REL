@@ -141,7 +141,7 @@ public class Formatter {
 		for (; indice < fileREL.getContent().size(); indice++) {
 			String search = fileREL.getContent().get(indice);
 			if ((search.contains("EARMI") || search.contains("earmi"))) {
-				for (int i = indice; i < indice + 25; i++) {
+				for (int i = indice; i < indice + 23; i++) {
 					search = fileREL.getContent().get(i).trim();
 					earmiToEmorto.add(search);
 					search = "";
@@ -335,47 +335,46 @@ public class Formatter {
 		getPATDados();
 		List<String[]> cmo = getCMODados();
 		List<String[]> earmi = getEARMIDados();
-//		String[][] dataArray = new String[][] {
-//				{ "", "C.MARG.AGUA", "", cmo.get(0)[1], cmo.get(0)[2],cmo.get(0)[3], cmo.get(0)[4] },
-//				{ "", "CMO", "PAT1", cmo.get(1)[3], cmo.get(1)[4],cmo.get(1)[5], cmo.get(1)[6] },
-//				{ "", "CMO", "PAT2", cmo.get(2)[2], cmo.get(2)[3],cmo.get(2)[4], cmo.get(2)[5] },
-//				{ "", "CMO", "PAT3", cmo.get(3)[2], cmo.get(3)[3],cmo.get(3)[4], cmo.get(3)[5] },
-//				{ "", "EARMI" ,earmi.get(0)[1]},
-//				{ "", "EARMF" },
-//				{ "", "EVERT" },
-//				{ "", "ECONT" },
-//				{ "", "ECONTC" },
-//				{ "", "EFIOB" },
-//				{ "", "EFIOL" },
-//				{ "", "GFIOL" },
-//				{ "", "PFIONTURB" },
-//				{ "", "PERDA FIO" },
-//				{ "", "META EVMIN" },
-//				{ "", "EVMIN" },
-//				{ "", "META DSVC" },
-//				{ "", "DSVAGUA" },
-//				{ "", "META DSVF" },
-//				{ "", "DSVAGUA FIO" },
-//				{ "", "EVAPORACAO" },
-//				{ "", "EMORTO" }
-//				};
+		String[][] dataArray = new String[][] {
+				{ "", "C.MARG.AGUA", "", cmo.get(0)[1], cmo.get(0)[2],cmo.get(0)[3], cmo.get(0)[4] },
+				{ "", "CMO", "PAT1", cmo.get(1)[3], cmo.get(1)[4],cmo.get(1)[5], cmo.get(1)[6] },
+				{ "", "CMO", "PAT2", cmo.get(2)[2], cmo.get(2)[3],cmo.get(2)[4], cmo.get(2)[5] },
+				{ "", "CMO", "PAT3", cmo.get(3)[2], cmo.get(3)[3],cmo.get(3)[4], cmo.get(3)[5] },
+				{ "", "EARMI" ,earmi.get(0)[1], earmi.get(0)[2], earmi.get(0)[3], earmi.get(0)[4]},
+				{ "", "EARMF" ,earmi.get(1)[1], earmi.get(1)[2], earmi.get(1)[3], earmi.get(1)[4]},
+				{ "", "EVERT" ,earmi.get(2)[1], earmi.get(2)[2], earmi.get(2)[3], earmi.get(2)[4]},
+				{ "", "ECONT" ,earmi.get(3)[1], earmi.get(3)[2], earmi.get(3)[3], earmi.get(3)[4]},
+				{ "", "ECONTC",earmi.get(4)[1], earmi.get(4)[2], earmi.get(4)[3], earmi.get(4)[4] },
+				{ "", "EFIOB" ,earmi.get(5)[1], earmi.get(5)[2], earmi.get(5)[3], earmi.get(5)[4]},
+				{ "", "EFIOL" ,earmi.get(6)[1], earmi.get(6)[2], earmi.get(6)[3], earmi.get(6)[4]},
+				{ "", "GFIOL" ,earmi.get(7)[1], earmi.get(7)[2], earmi.get(7)[3], earmi.get(7)[4]},
+				{ "", "PFIONTURB" ,earmi.get(8)[1], earmi.get(8)[2], earmi.get(8)[3], earmi.get(8)[4]},
+				{ "", "PERDA FIO" ,earmi.get(9)[1], earmi.get(9)[2], earmi.get(9)[3], earmi.get(9)[4]},
+				{ "", "META EVMIN" ,earmi.get(10)[1], earmi.get(10)[2], earmi.get(10)[3], earmi.get(10)[4]},
+				{ "", "EVMIN" ,earmi.get(11)[1], earmi.get(11)[2], earmi.get(11)[3], earmi.get(11)[4]},
+				{ "", "META DSVC" ,earmi.get(12)[1], earmi.get(12)[2], earmi.get(12)[3], earmi.get(12)[4]},
+				{ "", "DSVAGUA" ,earmi.get(13)[1], earmi.get(13)[2], earmi.get(13)[3], earmi.get(13)[4]},
+				{ "", "META DSVF" ,earmi.get(14)[1], earmi.get(14)[2], earmi.get(14)[3], earmi.get(14)[4]},
+				{ "", "DSVAGUA FIO" ,earmi.get(15)[1], earmi.get(15)[2], earmi.get(15)[3], earmi.get(15)[4]},
+				{ "", "EVAPORACAO" ,earmi.get(16)[1], earmi.get(16)[2], earmi.get(16)[3], earmi.get(16)[4]},
+				{ "", "EMORTO" ,earmi.get(17)[1], earmi.get(17)[2], earmi.get(17)[3], earmi.get(17)[4]}
+				};
 		
-		String[][] earmiList = null;
-		String[][] cmoList = null;
-		for (CMO cmoTemp : listCMO) {
-			for (int i=0; i<cmoTemp.getCmo().size(); i++) {
-				cmoList = new String[][] {{ "", cmo.get(i)[0], cmo.get(i)[1], cmo.get(i)[2], cmo.get(i)[3],cmo.get(i)[4]}};
-			}
-			for (int i=0; i<cmoTemp.getEarmi().size(); i++) {
-				earmiList = new String[][] {{ "", earmi.get(i)[0], earmi.get(i)[1], earmi.get(i)[2], earmi.get(i)[3],earmi.get(i)[4]}};
-			}
-		}
-		
-		dataList.addAll(Arrays.asList(cmoList));
-		dataList.addAll(Arrays.asList(earmiList));
+//		String[][] earmiList = null;
+//		String[][] cmoList = null;
+//		for (CMO cmoTemp : listCMO) {
+//			for (int i=0; i<cmoTemp.getCmo().size(); i++) {
+//				cmoList = new String[][] {{ "", cmo.get(i)[0], cmo.get(i)[1], cmo.get(i)[2], cmo.get(i)[3],cmo.get(i)[4]}};
+//			}
+//			for (int i=0; i<cmoTemp.getEarmi().size(); i++) {
+//				earmiList = new String[][] {{ "", earmi.get(i)[0], earmi.get(i)[1], earmi.get(i)[2], earmi.get(i)[3],earmi.get(i)[4]}};
+//			}
+//		}
+//		
+//		dataList.addAll(Arrays.asList(cmoList));
+//		dataList.addAll(Arrays.asList(earmiList));
 
-//		dataList.addAll(Arrays.asList(dataArray));
-//		dataList.addAll(Arrays.asList(dataArray3));
+		dataList.addAll(Arrays.asList(dataArray));
 
 		int size = (cmo.size() / 4);
 		for (int numeroCMO = 0; numeroCMO < size; numeroCMO++) {
@@ -384,6 +383,24 @@ public class Formatter {
 				int pat1 = (1 + 4 * numeroCMO);
 				int pat2 = (2 + 4 * numeroCMO);
 				int pat3 = (3 + 4 * numeroCMO);
+				int earmiToEmortoValue1 = (0 + 18 * numeroCMO);
+				int earmiToEmortoValue2 = (1 + 18 * numeroCMO);
+				int earmiToEmortoValue3 = (2 + 18 * numeroCMO);
+				int earmiToEmortoValue4 = (3 + 18 * numeroCMO);
+				int earmiToEmortoValue5 = (4 + 18 * numeroCMO);
+				int earmiToEmortoValue6 = (5 + 18 * numeroCMO);
+				int earmiToEmortoValue7 = (6 + 18 * numeroCMO);
+				int earmiToEmortoValue8 = (7 + 18 * numeroCMO);
+				int earmiToEmortoValue9 = (8 + 18 * numeroCMO);
+				int earmiToEmortoValue10 = (9 + 18 * numeroCMO);
+				int earmiToEmortoValue11 = (10 + 18 * numeroCMO);
+				int earmiToEmortoValue12 = (11 + 18 * numeroCMO);
+				int earmiToEmortoValue13 = (12 + 18 * numeroCMO);
+				int earmiToEmortoValue14 = (13 + 18 * numeroCMO);
+				int earmiToEmortoValue15 = (14 + 18 * numeroCMO);
+				int earmiToEmortoValue16 = (15 + 18 * numeroCMO);
+				int earmiToEmortoValue17 = (16 + 18 * numeroCMO);
+				int earmiToEmortoValue18 = (17 + 18 * numeroCMO);
 				String[][] dataArray2 = new String[][] {
 						{ "", "C.MARG.AGUA", "", cmo.get(agua)[1],
 								cmo.get(agua)[2], cmo.get(agua)[3],
@@ -396,16 +413,26 @@ public class Formatter {
 								cmo.get(pat2)[5] },
 						{ "", "CMO", "PAT3", cmo.get(pat3)[2],
 								cmo.get(pat3)[3], cmo.get(pat3)[4],
-								cmo.get(pat3)[5] }, { "", "EARMI" },
-						{ "", "EARMF" }, { "", "EVERT" }, { "", "ECONT" },
-						{ "", "ECONTC" }, { "", "EFIOB" }, { "", "EFIOL" },
-						{ "", "GFIOL" }, { "", "PFIONTURB" },
-						{ "", "PERDA FIO" }, { "", "META EVMIN" },
-						{ "", "EVMIN" }, { "", "META DSVC" },
-						{ "", "DSVAGUA" }, { "", "META DSVF" },
-						{ "", "DSVAGUA FIO" }, { "", "EVAPORACAO" },
-						{ "", "EMORTO" } };
-
+								cmo.get(pat3)[5] }, 
+								{ "", "EARMI" ,earmi.get(earmiToEmortoValue1)[1], earmi.get(earmiToEmortoValue1)[2], earmi.get(earmiToEmortoValue1)[3], earmi.get(earmiToEmortoValue1)[4]},
+								{ "", "EARMF" ,earmi.get(earmiToEmortoValue2)[1], earmi.get(earmiToEmortoValue2)[2], earmi.get(earmiToEmortoValue2)[3], earmi.get(earmiToEmortoValue2)[4]},
+								{ "", "EVERT" ,earmi.get(earmiToEmortoValue3)[1], earmi.get(earmiToEmortoValue3)[2], earmi.get(earmiToEmortoValue3)[3], earmi.get(earmiToEmortoValue3)[4]},
+								{ "", "ECONT" ,earmi.get(earmiToEmortoValue4)[1], earmi.get(earmiToEmortoValue4)[2], earmi.get(earmiToEmortoValue4)[3], earmi.get(earmiToEmortoValue4)[4]},
+								{ "", "ECONTC",earmi.get(earmiToEmortoValue5)[1], earmi.get(earmiToEmortoValue5)[2], earmi.get(earmiToEmortoValue5)[3], earmi.get(earmiToEmortoValue5)[4]},
+								{ "", "EFIOB" ,earmi.get(earmiToEmortoValue6)[1], earmi.get(earmiToEmortoValue6)[2], earmi.get(earmiToEmortoValue6)[3], earmi.get(earmiToEmortoValue6)[4]},
+								{ "", "EFIOL" ,earmi.get(earmiToEmortoValue7)[1], earmi.get(earmiToEmortoValue7)[2], earmi.get(earmiToEmortoValue7)[3], earmi.get(earmiToEmortoValue7)[4]},
+								{ "", "GFIOL" ,earmi.get(earmiToEmortoValue8)[1], earmi.get(earmiToEmortoValue8)[2], earmi.get(earmiToEmortoValue8)[3], earmi.get(earmiToEmortoValue8)[4]},
+								{ "", "PFIONTURB" ,earmi.get(earmiToEmortoValue9)[1], earmi.get(earmiToEmortoValue9)[2], earmi.get(earmiToEmortoValue9)[3], earmi.get(earmiToEmortoValue9)[4]},
+								{ "", "PERDA FIO" ,earmi.get(earmiToEmortoValue10)[1], earmi.get(earmiToEmortoValue10)[2], earmi.get(earmiToEmortoValue10)[3], earmi.get(earmiToEmortoValue10)[4]},
+								{ "", "META EVMIN" ,earmi.get(earmiToEmortoValue11)[1], earmi.get(earmiToEmortoValue11)[2], earmi.get(earmiToEmortoValue11)[3], earmi.get(earmiToEmortoValue11)[4]},
+								{ "", "EVMIN" ,earmi.get(earmiToEmortoValue12)[1], earmi.get(earmiToEmortoValue12)[2], earmi.get(earmiToEmortoValue12)[3], earmi.get(earmiToEmortoValue12)[4]},
+								{ "", "META DSVC" ,earmi.get(earmiToEmortoValue13)[1], earmi.get(earmiToEmortoValue13)[2], earmi.get(earmiToEmortoValue13)[3], earmi.get(earmiToEmortoValue13)[4]},
+								{ "", "DSVAGUA" ,earmi.get(earmiToEmortoValue14)[1], earmi.get(earmiToEmortoValue14)[2], earmi.get(earmiToEmortoValue14)[3], earmi.get(earmiToEmortoValue14)[4]},
+								{ "", "META DSVF" ,earmi.get(earmiToEmortoValue15)[1], earmi.get(earmiToEmortoValue15)[2], earmi.get(earmiToEmortoValue15)[3], earmi.get(earmiToEmortoValue15)[4]},
+								{ "", "DSVAGUA FIO" ,earmi.get(earmiToEmortoValue16)[1], earmi.get(earmiToEmortoValue16)[2], earmi.get(earmiToEmortoValue16)[3], earmi.get(earmiToEmortoValue16)[4]},
+								{ "", "EVAPORACAO" ,earmi.get(earmiToEmortoValue17)[1], earmi.get(earmiToEmortoValue17)[2], earmi.get(earmiToEmortoValue17)[3], earmi.get(earmiToEmortoValue17)[4]},
+								{ "", "EMORTO" ,earmi.get(earmiToEmortoValue18)[1], earmi.get(earmiToEmortoValue18)[2], earmi.get(earmiToEmortoValue18)[3], earmi.get(earmiToEmortoValue18)[4]}
+				};
 				dataList.addAll(Arrays.asList(dataArray2));
 			}
 		}
