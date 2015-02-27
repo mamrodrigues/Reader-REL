@@ -10,6 +10,7 @@ import br.com.leitor.rel.model.CMO;
 import br.com.leitor.rel.model.EAF;
 import br.com.leitor.rel.model.FileDAT;
 import br.com.leitor.rel.model.FileREL;
+import br.com.leitor.rel.model.PATAMAR;
 
 public class Formatter {
 
@@ -27,7 +28,7 @@ public class Formatter {
 		dataList.addAll(getTop());
 		dataList.addAll(getHeader());
 		dataList.addAll(getData());
-		// dataList.addAll(getFooter());
+		//dataList.addAll(getFooter());
 		return dataList;
 	}
 
@@ -115,7 +116,6 @@ public class Formatter {
 
 	private void getPATDados() {
 
-		// List<String> pat = new ArrayList<String>();
 		for (int index = 0; index < fileREL.getContent().size(); index++) {
 
 			String search = fileREL.getContent().get(index);
@@ -442,103 +442,118 @@ public class Formatter {
 
 	private List<String[]> getFooter() {
 		List<String[]> dataList = new ArrayList<String[]>();
-		int meses = getQtdMeses();
-		List<String[]> cmo = getCMODados();
-
+		
 		String[][] indiceDataArray = new String[][] { { " ", " ", " ", "SE",
 				"SU", "NE", "NO" } };
 
-		List<String> listStringDAT = getDadosPatamar(fileREL.getAnoInicial(),
-				fileREL.getMesInicial(), fileREL.getAnoFinal(),
-				fileREL.getMesFinal());
-		for (String string : listStringDAT) {
-			System.out.println(string);
-		}
+		List<PATAMAR> listPatamares = getDadosPatamar(fileREL.getAnoInicial(),
+				fileREL.getMesInicial(), fileREL.getAnoFinal(),fileREL.getMesFinal());
+		//calculaCMOFooter(listPatamares);
 
-		String[][] dataArray = null;
-		for (int i = 0; i < meses; i++) {
-			int pat = 1 + 4 * i;
-			int mes = Integer.parseInt(fileREL.getMesInicial()) + i;
-			dataArray = new String[][] {
-			// {String.valueOf(i),"CMO","MÊS INICIAL "+mes,cmo.get(pat)[3],cmo.get(pat)[4],cmo.get(pat)[5],cmo.get(pat)[6]}
-			};
-		}
+
 
 		dataList.addAll(Arrays.asList(indiceDataArray));
-		dataList.addAll(Arrays.asList(dataArray));
+//		dataList.addAll(Arrays.asList(dataArray));
 
 		return null;
 	}
 
-	public List<String> getDadosPatamar(int anoInicial, String mesInicial,
+	public List<PATAMAR> getDadosPatamar(int anoInicial, String mesInicial,
 			int anoFinal, String mesFinal) {
-		List<String> listStringDAT = new ArrayList<String>();
+		List<PATAMAR> listPATAMAR = new ArrayList<PATAMAR>();
+		
+		/** RECUPERANDO TODOS OS DADOS DO PATAMAR DO ANO **/
 		for (int index = 0; index < fileDAT.getContent().size(); index++) {
-			String search = fileDAT.getContent().get(index);
-			if (anoInicial == anoFinal) {
-				if (search.contains("" + anoInicial + "")) {
-					int indexDAT = index;
-					while (!fileDAT.getContent().get(indexDAT).isEmpty()
-							&& (indexDAT < index + 3)) {
-						search = fileDAT.getContent().get(indexDAT).trim();
-						if (search.startsWith("2014")) {
-							search = search.substring(4, search.length())
-									.trim();
-							listStringDAT.add(search);
-						} else {
-							listStringDAT.add(search);
+			String search = fileDAT.getContent().get(index).trim();
+			if (search.startsWith(Integer.toString(anoInicial))) {
+
+				for (int ano = anoInicial; ano <= anoFinal; ano++) {
+					search = fileDAT.getContent().get(index).trim();
+					PATAMAR patamar = new PATAMAR();
+					patamar.setAno(ano);
+					for (int aux = index; aux < index+3; aux++) {
+						search = fileDAT.getContent().get(aux).trim();
+						if (search.startsWith(Integer.toString(ano))) {
+							search = search.substring(4, search.length()).trim();
 						}
+						patamar.getListaNumero().add(search);
 						search = "";
-						indexDAT++;
 					}
-					break;
+					listPATAMAR.add(patamar);
+					index = index+3;
 				}
-				search = "";
-			} else {
-				if (search.contains("" + anoInicial + "")) {
-					int indexDAT = index;
-					while (!fileDAT.getContent().get(indexDAT).isEmpty()
-							&& (indexDAT < index + 3)) {
-						search = fileDAT.getContent().get(indexDAT).trim();
-						if (search.startsWith("2014")) {
-							search = search.substring(4, search.length())
-									.trim();
-							listStringDAT.add(search);
-						} else {
-							listStringDAT.add(search);
-						}
-						search = "";
-						indexDAT++;
-					}
-				}
-				if (search.contains("" + anoFinal + "")) {
-					int indexDAT = index;
-					while (!fileDAT.getContent().get(indexDAT).isEmpty()
-							&& (indexDAT < index + 3)) {
-						search = fileDAT.getContent().get(indexDAT).trim();
-						if (search.startsWith("2014")) {
-							search = search.substring(4, search.length())
-									.trim();
-							listStringDAT.add(search);
-						} else {
-							listStringDAT.add(search);
-						}
-						search = "";
-						indexDAT++;
-					}
-				}
-				break;
+				
+				/** COM O BREAK NESSE PONTO A EXECUÇÃO PARA QUANDO REALIZA O PRIMEIRO FOR
+					ISSO FAZ COM QUE SEJAM CARREGADOS APENAS PRIMEIROS DADOS DO ANO E MESES DOS PATAMARES **/
+				break; 
 			}
 			search = "";
 		}
-
-		for (String string : listStringDAT) {
-			// TODO CALCULO DOS 3 CMOS DOS MESES
-			String[] list = string.split(" ");
+		
+		/** FILTRO DE DADOS QUE SEPARA TODOS OS MESES PARA FACILITAR O CALCULO **/
+		for (int indicePatamar = 0; indicePatamar < listPATAMAR.size(); indicePatamar++) {
+			List<String[]> valores = new ArrayList<String[]>();
+			for (int indiceStringPatamar = 0; indiceStringPatamar < 3; indiceStringPatamar++) {
+				String[] teste = getLineArrayClean(listPATAMAR.get(indicePatamar).getListaNumero().get(indiceStringPatamar));
+				valores.add(teste);
+			}
+			listPATAMAR.get(indicePatamar).setValorMeses(valores);
 		}
-
-		return listStringDAT;
+		
+		calculaCMOFooter(listPATAMAR,Integer.parseInt(mesInicial), Integer.parseInt(mesFinal),anoInicial,anoFinal);
+		
+		return listPATAMAR;
 	}
+	
+	public void calculaCMOFooter(List<PATAMAR> listPatamares, int mesInicial, int mesFinal,int anoInicial,int anoFinal){
+		//List<String[]> cmo = getCMODados();
+		//String[][] dataArray = null;
+		
+		for (int indicePatamar = 0; indicePatamar < listPatamares.size(); indicePatamar++) {
+			if (listPatamares.get(indicePatamar).getAno()==anoInicial){
+				for (int i = 0; i < listPatamares.get(indicePatamar).getValorMeses().size(); i++) { 
+					//PARA CADA UMA DAS 3 LINHAS
+					while(mesInicial < 12){
+						listCMO.size(); // VERIFICAR ESTE TAMANHO, POIS DEVE SER A DIFERENÇA ENTRE OS MESES DO ANO
+						listCMO.get(indicePatamar);	// PEGAR OS DADOS DO CMO DO MES E MULTIPLICAR PELOS DADOS DO PATAMAR
+						mesInicial++;
+					}
+					
+				}
+			} else if (listPatamares.get(indicePatamar).getAno()==anoFinal){
+				for (int i = 0; i < listPatamares.get(indicePatamar).getValorMeses().size(); i++) { 
+					//PARA CADA UMA DAS 3 LINHAS
+					for (int mes = 0; mes < mesFinal; mes++) {
+						listCMO.size(); // VERIFICAR ESTE TAMANHO, POIS DEVE SER A DIFERENÇA ENTRE OS MESES DO ANO
+						listCMO.get(indicePatamar);	// PEGAR OS DADOS DO CMO DO MES E MULTIPLICAR PELOS DADOS DO PATAMAR
+					}
+					
+				}
+			} else {
+				for (int i = 0; i < listPatamares.get(indicePatamar).getValorMeses().size(); i++) { 
+					//PARA CADA UMA DAS 3 LINHAS
+					for (int mes = 0; mes < 12; mes++) {
+						listCMO.size(); // VERIFICAR ESTE TAMANHO, POIS DEVE SER A DIFERENÇA ENTRE OS MESES DO ANO
+						listCMO.get(indicePatamar);	// PEGAR OS DADOS DO CMO DO MES E MULTIPLICAR PELOS DADOS DO PATAMAR
+					}
+				}
+			}
+			
+		}
+		
+//		
+//		for (int i = 0; i < meses; i++) {
+//			int pat = 1 + 4 * i;
+//			int mes = Integer.parseInt(fileREL.getMesInicial()) + i;
+//
+//		}
+//		String[][] dataArray = new String[][] {
+//				 {String.valueOf(i),"CMO","MÊS INICIAL "+mes,cmo.get(pat)[3],cmo.get(pat)[4],cmo.get(pat)[5],cmo.get(pat)[6]}
+//				};
+		
+	}
+	
+	
 
 	public String[] getLineArrayClean(String string) {
 		String[] list = string.split(" ");
